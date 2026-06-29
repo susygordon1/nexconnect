@@ -461,6 +461,7 @@ const SEED_EVENTS=[
 {id:20053,name:"Young Professionals Summit",organizer:"Fort Worth Chamber",day:"Wednesday",time:"TBD",endTime:"",location:"TBD",recurrence:"One-time",date:"Sep 9, 2026",notes:"",attended:[],active:false},
 {id:20054,name:"TCL Lead Business & Leadership Conference",organizer:"Fort Worth Chamber",day:"Monday",time:"TBD",endTime:"",location:"TBD",recurrence:"One-time",date:"Oct 26, 2026",notes:"",attended:[],active:false},
 {id:20055,name:"Ribbon Cutting",organizer:"Fort Worth Chamber",day:"Varies",time:"Varies",endTime:"",location:"Varies",recurrence:"As scheduled",date:"",notes:"Check FW Chamber calendar",attended:[],active:false},
+{id:20060,name:"FBI – Faith Business Impact",organizer:"Independent/Community",day:"Monday",time:"8:30 AM",endTime:"9:30 AM",location:"TBD – venue needed",recurrence:"Weekly starting Jul 6, 2026",date:"",notes:"Powered by Mega Mission Media. Weekly faith-based business networking. Accountability wins from last week · Prayer requests · Community impact · One 'Most Wanted' speaker per week (subject matter expert, 30 min). Case files. Most wanted. Making it fun.",attended:[],active:false},
 ];
 
 const CATEGORIES=["Financial/Accounting","Legal","Real Estate/Construction","Staffing/HR","Tech/Digital/AI","Media/Marketing/Creative","Health/Wellness","Education/Nonprofit","Funding/Lending","Utilities/Energy","Venues/Events","Transportation/Logistics","Faith/Community","Food/Retail/Other","Other"];
@@ -704,13 +705,15 @@ function clearCardForm(){
 }
 
 // ── PEOPLE ────────────────────────────────────────────────────────────────────
+function getFirstName(c){if(!c.name)return c.company||"";return c.name.trim().split(" ")[0].toLowerCase();}
+
 function renderPeople(){
   const q=document.getElementById('people-search').value.toLowerCase();
   const filtered=contacts.filter(c=>{
     const m=!q||[c.name,c.company,c.event,c.category,c.notes,c.voiceMemo].join(' ').toLowerCase().includes(q);
     const cm=catFilter==='All'||c.category===catFilter;
     return m&&cm;
-  });
+  }).sort((a,b)=>getFirstName(a).localeCompare(getFirstName(b)));
 
   // Category filter pills
   const catCounts={};contacts.forEach(c=>{catCounts[c.category]=(catCounts[c.category]||0)+1;});
